@@ -1,0 +1,76 @@
+MERN From Scratch 2023 | eCommerce Platform
+
+
+Section 1: Introduction
+
+1. Welcome To The Course
+
+2. Course Project Intro
+
+3. Course Code Repo
+
+4. Getting Started
+
+
+Section 2: Starting The Front End
+
+5. React Setup & Git Initialize
+-kreiramo folder frontend
+-instaliramo Vite React projekt
+
+6. Header & Footer Components
+-u terminalu instalirano React Bootstrap i React ikonice paket
+-u main.jsx komponentu importujemo React Bootstrap css fajl
+-u folderu src kreiramo folder components
+-u folderu components kreiramo komponentu Header.jsx
+-u komponentu Header.jsx importujemo React Bootstrap komponente i React ikonice
+-u komponentu App.jsx importujemo komponentu Header.jsx i React Bootstrap komponente
+-u folderu components kreiramo komponentu Footer.jsx
+-u komponentu Footer.jsx importujemo React Bootstrap komponente
+-u komponentu App.jsx importujemo komponentu Footer.jsx
+
+7. Custom Bootstrap Theme
+-u folderu assets kreiramo folder styles
+-u folderu styles kreiramo bootstrap.custom.css i index.css fajlove
+-u folder assets dodajemo sliku
+-u komponentu Header.jsx importujemo sliku logo
+
+8. List Products
+-u folderu public kreiramo folder images sa slikama
+-u folderu src kreiramo product.js fajl
+-kreiramo folder screens
+-u folderu screens kreiramo komponentu HomeScreen.jsx
+-u komponentu HomeScreen.jsx importujemo React Bootstrap komponente
+-importujemo products fajl
+-u return izjavi varijabli products dodajemo metodu map()
+-u komponentu App.jsx importujemo komponentu HomeScreen.jsx
+-u folderu components kreiramo komponentu Product.jsx
+-u komponentu HomeScreen.jsx importujemo komponentu Product.jsx
+
+9. Implement React Router
+-u terminalu instaliramo paket React Router Dom
+-u main.jsx komponentu importujemo funkcije iz React Router Dom paketa
+-kreiramo funkciju createBrowserRouter()
+-u funkciju createBrowserRouter() proslijedujemo funkciju createRoutesFromElements()
+-u funkciji createRoutesFromElements kreiramo komponentu Route
+-vrijednost funkcije createBrowserRouter() pohranjujemo u varijablu const router
+-u metodu render() dodajemo komponentu RouterProvider
+-komponenti RouterProvider dodajemo prop router
+-u prop router proslijedujemo varijablu router
+-u komponentu App.jsx importujemo komponentu Outlet iz React Router Dom paketa
+-u terminalu instaliramo paket React Router Bootstrap
+-u komponentu Header importujemo komponentu LinkContainer
+
+10. Rating Component
+-kreiramo komponentu Rating.jsx
+-u komponentu Rating.jsx importujemo React ikonice
+-funkciji Rating dodajemo parametre destruktuirane prop
+-u komponentu Product.jsx importujemo komponentu Rating.jsx
+
+11. Product Details Page
+-u folderu screens kreiramo komponentu ProductScreen.jsx
+-u komponentu ProductScreen.jsx importujemo React Hook useParams
+-importujemo fajl products
+-destruktuiramo id iz funkcije React Hook useParams()
+-kreiramo varijablu const product
+
