@@ -74,3 +74,34 @@ Section 2: Starting The Front End
 -destruktuiramo id iz funkcije React Hook useParams()
 -kreiramo varijablu const product
 
+
+Section 3: Serving & Fetching Data
+
+12. Full Stack Workflow & Explanation
+
+13. Express Server & Initial Product Routes
+-kreiramo .gitignore fajl 
+-kreiramo folderu backend
+-u terminalu udemo u folder backend sa komandom cd backend
+-u terminalu ukucamo komandu npm init da inicijaliziramo package.json fajl
+-kreiramo server.js fajl
+-u server.js fajlu kreiramo express setup
+
+14. Nodemon & Concurrently
+-u terminalu instaliramo Nodemon paket
+-backend pokrenemo sa komandom npm run server
+
+15. Environment Variables
+-u terminalu instaliramo paket Dotenv
+-u server.js fajl importujemo dotenv paket
+
+16. Fetch Products
+-u folderu frontend instaliramo paket Axios
+-u komponentu HomeScreen.jsx importujemo useState i useEffect React Hooks
+-kreiramo state varijablu products i funkciju setProducts
+-kreiramo funkciju useEffect()
+-u funkciji useEffect() kreiramo asinhronu funkciju fetchProducts
+-u komponentu ProductScreen.jsx importujemo useState i useEffect React Hooks
+-kreiramo funkciju useEffect()
+-kreiramo state varijablu product i funkciju setProduct
+-u funkciji useEffect() kreiramo asinhronu funkciju fetchProduct
