@@ -105,3 +105,79 @@ Section 3: Serving & Fetching Data
 -kreiramo funkciju useEffect()
 -kreiramo state varijablu product i funkciju setProduct
 -u funkciji useEffect() kreiramo asinhronu funkciju fetchProduct
+
+
+Section 4: Starting MongoDB & Mongoose
+
+17. MongoDB Atlas Setup
+-kreiramo Cloud bazu podataka MongoDB Atlas
+
+18. MongoDB Compass Setup
+-preuzmemo Desktop verziju aplikacije
+
+19. Connect With Mongoose
+-u folderu backend, u terminalu instaliramo paket Mongoose
+-kreiramo folder config
+-u folderu config kreiramo db.js fajl
+-u db.js fajl importujemo objekt mongoose
+-kreiramo asinhronu funkciju connectDB()
+-u asinhronoj funkciji connectDB() kreiramo blokove koda try - catch
+-u server.js fajl importujemo funkciju connectDB
+-pozivamo funkciju connectDB()
+
+20.  Modeling Our Data
+-u folderu backend, kreiramo folder models
+-u folderu models kreiramo productModel.js fajl
+-u productModel.js fajl importujemo objekt mongoose
+-kreiramo funkciju mongoose.Schema({ ... })
+-vrijednost mongoose.Schema({ ... }) pohranjujemo u varijablu const productSchema
+-kreiramo i ekskportujemo varijablu const Product kao default
+-kreiramo varijablu reviewSchema
+-kreiramo userModel.js fajl
+-kreiramo varijablu const userSchema 
+-kreiramo varijablu const User
+-kreiramo orderModel.js fajl
+-kreiramo varijablu orderSchema
+-kreiramo i ekskportujemo varijablu const Order kao default
+
+21. Prepare Sample Data
+-u folderu data kreiramo users.js fajl
+-u terminalu instaliramo bcrypt paket
+-u users.js fajlu kreiramo varijablu const users 
+
+22. Seeding Sample Data
+-u folderu backend kreiramo seeder.js fajl
+-u seeder.js fajlu kreiramo asinhronu funkciju importData()
+-kreiramo asinhronu funkciju destroyData()
+-u package.json fajlu dodajemo komande za seeder.js fajl
+
+23. Getting Started With Postman
+-kreiramo i testiramo rute u Postman-u
+
+24. Get Products from Database
+-u folderu backend kreiramo folder routes
+-u folderu routes kreiramo productRoutes.js fajl
+-u server.js fajl importujemo varijablu productRoutes
+-kreiramo metodu app.use('/api/products', productRoutes)
+-u folderu backend kreiramo folder middleware
+-u folderu middleware kreiramo asyncHandler.js fajl
+-u asyncHandler.js fajlu kreiramo funkciju asyncHandler()
+-u productRoutes.js fajl importujemo funkciju asyncHandler
+-importujemo objekt Product
+-u metodi router.get('/') kreiramo varijablu const products
+-kreiramo metodu res.json(products)
+-u metodi router.get('/:id') kreiramo varijablu const product
+-dodajemo uslov if (product)
+-kreiramo metodu res.status(404).json({ ... })
+
+25. Custom Error Middleware
+-u folderu middleware kreiramo errorMiddleware.js fajl
+-u errorMiddleware.js fajlu kreiramo i ekskportujemo funkcije notFound() i errorHandler()
+-u server.js fajl importujemo kreirane funkcije 
+-kreiramo dvije metode app.use(notFound) i app.use(errorHandler)
+
+26. Product Controller
+-kreiramo folder controllers
+-u folderu controllers kreiramo productController.js fajl
+-u productController.js fajlu kreiramo funkcije getProducts() i getProductById()
+-u productRoutes.js fajlu kreiramo dvije metode router.route()
