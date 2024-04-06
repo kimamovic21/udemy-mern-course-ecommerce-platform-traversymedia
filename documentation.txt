@@ -181,3 +181,48 @@ Section 4: Starting MongoDB & Mongoose
 -u folderu controllers kreiramo productController.js fajl
 -u productController.js fajlu kreiramo funkcije getProducts() i getProductById()
 -u productRoutes.js fajlu kreiramo dvije metode router.route()
+
+
+Section 5: Redux Toolkit Setup & State Management
+
+27. Redux & State Overview
+
+28. Redux Store & API Slice
+-u folderu frontend, u terminalu instaliramo React Redux i Redux Toolkit pakete
+-u folderu src kreiramo store.js fajl
+-u store.js fajl importujemo funkciju configureStore
+-kreiramo funkciju configureStore({ ... })
+-vrijednost funkcije configureStore() pohranjujemo u varijablu const store
+-u main.jsx komponentu importujemo komponentu Provider
+-importujemo varijablu store
+-komponenti Provider dodajemo prop store
+-u prop store proslijedujemo varijablu store
+-kreiramo constants.js fajl
+-u constants.js fajlu kreiramo i ekskportujemo varijable
+-u folderu src kreiramo folder slices
+-u folderu slices kreiramo apiSlice.js fajl
+-u apiSlice.js fajl importujemo funkcije createApi i fetchBaseQuery
+-importujemo varijablu BASE_URL
+-kreiramo varijablu const baseQuery
+-kreiramo funkciju createApi({ ... })
+-vrijednost funkcije createApi() pohranjujemo u varijablu const apiSlice
+-u store.js fajl importujemo varijablu apiSlice
+
+29. Products API Slice & Get Products Endpoint
+-u folderu slices kreiramo productsApiSlice.js fajl
+-u productsApiSlice.js fajl importujemo funkciju apiSlice i varijablu PRODUCTS_URL
+-kreiramo funkciju apiSlice.injectEndpoints({ ... })
+-vrijednost funkcije apiSlice.index() pohranjujemo u varijablu const productsApiSlice
+-ekskportujemo funkciju useGetProductsQuery
+-u komponentu HomeScreen.jsx importujemo funkciju useGetProductsQuery 
+
+30. Get Product Details Endpoint Challenge
+-u productApiSlice.js fajlu kreiramo endpoint funkciju getProductDetails i ekskportujemo funkciju useGetProductDetailsQuery
+-u komponentu HomeScreen.jsx importujemo funkciju useGetProductDetailsQuery
+
+31. Loader & Message Components
+-u folderu components kreiramo komponentu Loader.jsx 
+-u komponente HomeScreen.jsx i ProductScreen.jsx importujemo komponentu Loader.jsx
+-u folderu components kreiramo komponentu Message.jsx
+-u komponentu Message.jsx importujemo komponentu Alert iz React Bootstrap paketa
+-u komponente HomeScreen.jsx i ProductScreen.jsx importujemo komponentu Message.jsx
