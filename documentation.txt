@@ -226,3 +226,70 @@ Section 5: Redux Toolkit Setup & State Management
 -u folderu components kreiramo komponentu Message.jsx
 -u komponentu Message.jsx importujemo komponentu Alert iz React Bootstrap paketa
 -u komponente HomeScreen.jsx i ProductScreen.jsx importujemo komponentu Message.jsx
+
+
+Section 6: Shopping Cart Functionality
+
+32. Cart Slice & Reducer
+-u folderu slices kreiramo cartSlice.js fajl
+-u cartSlice.js fajl importujemo funkciju createSlice
+-kreiramo varijablu const initialState
+-kreiramo funkciju createSlice({ ... })
+-vrijednost funkcije createSlice() pohranjujemo u varijablu const cartSlice
+
+33. Add To Cart Function
+-u cartSlice.js fajlu, u objektu reducers kreiramo funkciju addToCart
+-kreiramo funkciju addDecimals()
+-ekskportujemo funkciju addToCart kao cartSlice.actions
+
+34. Qty & Add To Cart Handler
+-u komponentu ProductScreen.jsx importujemo React Hook useState
+-kreiramo state varijablu const [qty, setQty] = useState(1)
+-importujemo komponentu Form iz paketa React Bootstrap
+-kreiramo uslov product.countInStock > 0 && () 
+-kreiramo funkciju addToCartHandler()
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju addToCartHandler
+-importujemo funkciju addToCart iz cartSlice.js fajla
+-importujemo useNavigate React Hook iz paketa React Router Dom
+-importujemo funkciju useDispatch iz paketa React Redux
+-kreiramo funkciju useDispatch()
+-vrijednost funkcije useDispatch() pohranjujemo u varijablu const dispatch
+-kreiramo funkciju useNavigate()
+-vrijednost funkcije useNavigate() pohranjujemo u varijablu const navigate
+-u funkciju addToCartHandler() dodajemo funkciju dispatch(addToCart({ ... }))
+
+35. Cart Utils File
+-u folderu src kreiramo folder utils
+-u folderu utils kreiramo cartUtils.js fajl
+-u cartSlice.js fajlu kreiramo dvije funkcije addDecimals() i updateCart()
+
+36. Item Count in Header
+-u komponentu Header.jsx importujemo React Hook useSelector
+-kreiramo funkciju useSelector()
+-iz funkcije useSelector() destruktuiramo varijablu cartItems
+-importujemo komponentu Badge
+-u return izjavu, dodajemo uslov cartItems.length > 0 && (...)
+
+37. Cart Screen
+-kreiramo komponentu CartScreen.jsx
+-u komponenti CartScreen.jsx kreiramo varijable navigate, dispatch
+-kreiramo varijablu const cart
+-destruktuiramo varijablu cartItems iz varijable cart
+-u return izjavu dodajemo uslov cartItems.length === 0
+-u komponentu ListGroup dodajemo metodu cartItems.map()
+-u komponenti Form.Control dodajemo metodu [...Array(item.countInStock).keys()]
+-kreiramo funkciju addToCartHandler()
+-importujemo funkciju addToCart
+-komponenti FormControl dodajemo prop onChange
+-u prop onChange proslijedujemo funkciju addToCartHandler
+-u funkciju addToCartHandler() dodajemo funkciju dispatch(addToCart({ ... }))
+
+38. Remove From Cart
+-u cartSlice.js fajlu kreiramo funkciju removeFromCart
+-u komponentu CartScreen.jsx importujemo funkciju removeFromCart
+-kreiramo funkciju removeFromCartHandler()
+-u funkciju removeFromCartHandler() dodajemo funkciju dispatch(removeFromCart())
+-kreiramo funkciju checkoutHanlder
+-komponenti Button Proceed To Checkout dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju checkoutHanlder
