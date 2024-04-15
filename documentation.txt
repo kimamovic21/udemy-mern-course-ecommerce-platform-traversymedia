@@ -131,14 +131,14 @@ Section 4: Starting MongoDB & Mongoose
 -u productModel.js fajl importujemo objekt mongoose
 -kreiramo funkciju mongoose.Schema({ ... })
 -vrijednost mongoose.Schema({ ... }) pohranjujemo u varijablu const productSchema
--kreiramo i ekskportujemo varijablu const Product kao default
+-kreiramo i eksportujemo varijablu const Product kao default
 -kreiramo varijablu reviewSchema
 -kreiramo userModel.js fajl
 -kreiramo varijablu const userSchema 
 -kreiramo varijablu const User
 -kreiramo orderModel.js fajl
 -kreiramo varijablu orderSchema
--kreiramo i ekskportujemo varijablu const Order kao default
+-kreiramo i eksportujemo varijablu const Order kao default
 
 21. Prepare Sample Data
 -u folderu data kreiramo users.js fajl
@@ -172,7 +172,7 @@ Section 4: Starting MongoDB & Mongoose
 
 25. Custom Error Middleware
 -u folderu middleware kreiramo errorMiddleware.js fajl
--u errorMiddleware.js fajlu kreiramo i ekskportujemo funkcije notFound() i errorHandler()
+-u errorMiddleware.js fajlu kreiramo i eksportujemo funkcije notFound() i errorHandler()
 -u server.js fajl importujemo kreirane funkcije 
 -kreiramo dvije metode app.use(notFound) i app.use(errorHandler)
 
@@ -198,7 +198,7 @@ Section 5: Redux Toolkit Setup & State Management
 -komponenti Provider dodajemo prop store
 -u prop store proslijedujemo varijablu store
 -kreiramo constants.js fajl
--u constants.js fajlu kreiramo i ekskportujemo varijable
+-u constants.js fajlu kreiramo i eksportujemo varijable
 -u folderu src kreiramo folder slices
 -u folderu slices kreiramo apiSlice.js fajl
 -u apiSlice.js fajl importujemo funkcije createApi i fetchBaseQuery
@@ -213,11 +213,11 @@ Section 5: Redux Toolkit Setup & State Management
 -u productsApiSlice.js fajl importujemo funkciju apiSlice i varijablu PRODUCTS_URL
 -kreiramo funkciju apiSlice.injectEndpoints({ ... })
 -vrijednost funkcije apiSlice.index() pohranjujemo u varijablu const productsApiSlice
--ekskportujemo funkciju useGetProductsQuery
+-eksportujemo funkciju useGetProductsQuery
 -u komponentu HomeScreen.jsx importujemo funkciju useGetProductsQuery 
 
 30. Get Product Details Endpoint Challenge
--u productApiSlice.js fajlu kreiramo endpoint funkciju getProductDetails i ekskportujemo funkciju useGetProductDetailsQuery
+-u productApiSlice.js fajlu kreiramo endpoint funkciju getProductDetails i eksportujemo funkciju useGetProductDetailsQuery
 -u komponentu HomeScreen.jsx importujemo funkciju useGetProductDetailsQuery
 
 31. Loader & Message Components
@@ -240,7 +240,7 @@ Section 6: Shopping Cart Functionality
 33. Add To Cart Function
 -u cartSlice.js fajlu, u objektu reducers kreiramo funkciju addToCart
 -kreiramo funkciju addDecimals()
--ekskportujemo funkciju addToCart kao cartSlice.actions
+-eksportujemo funkciju addToCart kao cartSlice.actions
 
 34. Qty & Add To Cart Handler
 -u komponentu ProductScreen.jsx importujemo React Hook useState
@@ -293,3 +293,111 @@ Section 6: Shopping Cart Functionality
 -kreiramo funkciju checkoutHanlder
 -komponenti Button Proceed To Checkout dodajemo prop onClick
 -u prop onClick proslijedujemo funkciju checkoutHanlder
+
+
+Section 7: Backend Authentication
+
+39. User Routes & Controller
+-u folderu backend kreiramo fajlove userController.js i userRoutes.js
+-u userController.js fajlu kreiramo i eksportujemo funkcije authUser(), registerUser(), logoutUser(), getUserProfile(), updateUserProfile(), getUsers(), getUserById(), deleteUser(), updateUser()
+-importujemo User Model
+-u userRoutes.js fajl importujemo funkcije iz userController.js fajla
+-kreiramo rute za importovane funkcije
+-kreiramo i eksportujemo varijablu const router kao default
+-u server.js fajl importujemo router iz userRoutes.js fajla kao userRoutes
+-kreiramo metodu app.use('/api/users', userRoutes)
+-kreiramo i testiramo rute u Postman-u
+
+40. User Email & Password Validation
+-u server.js fajlu kreiramo metodu app.use(express.json())
+-kreiramo metodu app.use(express.urlencoded({ extended: true }))
+-u userController.js fajlu u funkciji authUser() kreiramo metodu await User.findOne({ email })
+-vrijednost metode User.findOne() pohranjujemo u varijablu const user
+-u userModel.js fajl importujemo paket Bcrypt
+-kreiramo metodu userSchema.methods.matchPassword
+-u userController.js fajlu, u funkciju authUser() dodajemo uslov if (user && (await user.matchPassword(password)))
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(401)
+-dodajemo objekt throw new Error()
+
+41. How Do JSON Web Tokens Work ?
+
+42. JWT HTTP Only Cookie
+-u folderu backend instaliramo paket Jsonwebtoken sa komandom npm i jsonwebtoken
+-u userController.js fajlu, u funkciji authUser() kreiramo varijablu const token
+-importujemo varijablu jwt iz paketa Jsonwebtoken
+-kreiramo metodu res.cookie()
+-u .env fajlu kreiramo varijablu JWT_SECRET
+
+43. Auth Middleware & Endpoint
+-u terminalu instaliramo paket Cookie Parser sa komandom npm i cookie-parser
+-u server.js fajl importujemo varijablu cookieParser
+-kreiramo metodu app.use(cookieParser())
+-u folderu middleware kreiramo authMiddleware.js fajl
+-importujemo varijablu jwt
+-importujemo funkciju asyncHandler
+-importujemo objekt User
+-kreiramo i eksportujemo funkciju protect()
+-u funkciji protect kreiramo varijablu let token
+-inicijaliziramo varijablu token = req.cookies.jwt
+-dodajemo uslov if (token)
+-dodajemo uslov else
+-u blok koda else dodajemo metodu res.status(401) i objekt Error
+-u uslov if (token) dodajemo blokove koda try - catch
+-u bloku koda try kreiramo varijablu const decoded
+-dodajemo metodu await User.findById()
+-dodajemo funkciju next()
+-kreiramo i eksportujemo funkciju admin() sa tri parametre req, res, next
+-u funkciju admin() dodajemo uslov if (req.user && req.user.isAdmin)
+-dodajemo uslov else
+-u uslov else dodajemo res.status(401) i objekt Error
+-u userRoutes.js fajl importData funkcije protect i admin
+-testiramo rute u Postman-u
+
+44. Logout User & Clear Cookie
+-u userController.js fajlu, u funkciji logoutUser() kreiramo metodu res.cookie()
+-dodajemo metodu res.status(200).json({ ... })
+-testiramo rute u Postman-u
+
+45. User Register Endpoint & Encryption
+-u userController.js fajlu, u funkciji registerUser() destruktuiramo varijable const { name, email, password } = req.body
+-kreiramo varijablu const userExists
+-dodajemo uslov if (userExists)
+-u uslov if (userExists) dodajemo metodu res.status(400) i objekt Error
+-kreiramo metodu await User.create({ ... })
+-vrijednost metode User.create() pohranjujemo u varijablu const user
+-dodajemo uslov if (user)
+-u uslov if (user) dodajemo metodu res.status(201).json({ ... })
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(400) i objekt Error
+-u userModel.js fajlu kreiramo metodu userSchema.pre('save', ...)
+-u anonimnu funkciju sa parametrom next dodajemo uslov if (!this.isModified('password'))
+-u uslov if dodajemo funkciju next()
+-dodajemo metodu await bcrypt.genSalt(10)
+-vrijednost metode await bcrypt pohranjujemo u varijablu const salt
+-dodajemo metodu await bcrypt.hash(this.password, salt)
+-vrijednost metode bcrypt.hash() pohranjujemo u varijablu this.password
+-kreiramo folder utils
+-u folderu utils kreiramo generateToken.js fajl
+-u generateToken.js fajl importData varijablu jwt
+-kreiramo funkciju generateToken() sa dva parametra res i userId
+-u funkciji generateToken() kreiramo varijablu const token i metodu res.cookie()
+-funkciju generateToken eksportujemo kao default
+-u userController.js fajl importujemo funkciju generateToken()
+-u funkciju authUser() dodajemo funkciju generateToken();
+-u funkciju registerUser() dodajemo funkciju generateToken()
+
+46. User Profile Endpoints
+-u userController.js fajlu, u funkciji getUserById() kreiramo varijablu const user
+-dodajemo uslov if (user)
+-u uslov if (user) dodajemo metodu res.status(200).json({ ... })
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(404) i objekt Error
+-u funkciji updateUserProfile() kreiramo varijablu const user
+-dodajemo uslov if (user)
+-u uslov if (user) dodajemo uslov if (req.body.password)
+-dodajemo metodu await user.save()
+-vrijednost metode await user.save() pohranjujemo u varijablu const updatedUser
+-dodajemo metodu res.status(200).json({ ... })
+-za uslov koda if (user) dodajemo uslov else
+-u uslov else dodajemo metode res.status(404) i objekt Error
