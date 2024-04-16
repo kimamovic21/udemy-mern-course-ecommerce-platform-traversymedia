@@ -468,3 +468,27 @@ Section 8: Frontend Authentication
 -kreiramo funkciju logoutHandler()
 -komponenti NavDropdown.Item dodajemo prop onClick
 -u prop onClick proslijedujemo funkciju logoutHandler
+
+50. User Logout
+-u usersApiSlice.js fajlu kreiramo funkciju logout
+-eksportujemo funkciju useLogoutMutation
+-u authSlice.js fajlu kreiramo funkciju logout
+-u komponentu Header.jsx importujemo funkciju useLogoutMutation
+-importujemo funkcije logout, useNavigate, useDispatch
+-kreiramo varijablu const dispatch i const navigate
+-u funkciju logoutHandler() dodajemo blokove koda try - catch
+-destruktuiramo varijablu const [logoutApiCall] = useLogoutMutation()
+-u blok koda try dodajemo await logoutApiCall().unwrap()
+-dodajemo funkciju dispatch(logout())
+-dodajemo navigate('/login')
+
+51. User Registration
+-u usersApiSlice.js fajlu kreiramo funkciju register
+-eksportujemo funkciju useRegisterMutation
+-u folderu screens kreiramo komponentu RegisterScreen.jsx
+-kopiramo kod iz LoginScreen.jsx komponente i napravimo manje izmjene
+-kreiramo nove state varijable name i confirmPassword
+-u funkciji submitHandler dodajemo uslov if (password !== confirmPassword)
+-dodajemo uslov else
+-u uslov else dodajemo blokove koda try - catch
+-u komponentu main.jsx importujemo komponentu RegisterScreen.jsx
