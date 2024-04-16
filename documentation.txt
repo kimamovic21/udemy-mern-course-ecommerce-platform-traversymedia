@@ -401,3 +401,70 @@ Section 7: Backend Authentication
 -dodajemo metodu res.status(200).json({ ... })
 -za uslov koda if (user) dodajemo uslov else
 -u uslov else dodajemo metode res.status(404) i objekt Error
+
+
+Section 8: Frontend Authentication
+
+47. Auth & User API Slice
+-u folderu frontend, u folderu slices kreiramo authSlice.js fajl
+-u authSlice.js fajl importujemo funkciju createSlice
+-kreiramo varijablu const initialState
+-kreiramo funkciju createSlice({ ... })
+-vrijednost funkcije createSlice() pohranjujemo u varijablu const authSlice
+-eksportujemo varijablu setCredentials kao authSlice.actions
+-eksportujemo varijablu authSlice.reducer kao default
+-u store.js fajl importujemo varijablu authSliceReducer
+-u objekt reducer dodajemo auth: authSliceReducer
+-u folderu slices kreiramo usersApiSlice.js fajl
+-kreiramo i eksportujemo varijablu const usersApiSlice
+-eksportujemo funkciju useLoginMutation
+
+48. Login Screen
+-u folderu components kreiramo komponentu FormContainer.jsx
+-funkciji FormContainer() dodajemo parametar destruktuirani prop children
+-importujemo React Bootstrap komponente Container, Row, Col
+-u folderu screens kreiramo komponentu LoginScreen.jsx
+-u komponentu LoginScreen.jsx importovane React Hook useState
+-importujemo komponentu Link iz paketa React Router Dom
+-importujemo komponente Form, Button, Row, Col iz paketa React Bootstrap
+-importujemo komponentu FormContainer
+-kreiramo state varijable email i password
+-kreiramo funkciju submitHandler() sa parametrom e
+-u return izjavu dodajemo komponentu FormContainer kao roditelj komponentu
+-u komponentu FormContainer kreiramo komponentu Form
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-u komponenti Form kreiramo komponente Form.Group i Form.Control
+-ponovimo isti postupak za sifru
+-kreiramo komponentu Button
+-u komponentu main.jsx importujemo komponentu LoginScreen.jsx
+-kreiramo komponentu Route za komponentu LoginScreen
+
+49. Login Functionality
+-u terminalu instaliramo paket React Toastify sa komandom npm i react-toastify
+-u komponentu App.jsx importujemo komponentu ToastContainer iz paketa React Toastify
+-u return izjavu dodajemo komponentu ToastContainer
+-u komponentu LoginScreen.jsx importujemo React Hook useEffect
+-importujemo funkcije useLocation i useNavigate iz paketa React Router Dom
+-importujemo funkcije useDispatch i useSelector iz pakete React Redux
+-importujemo komponentu Loader.jsx
+-importujemo funkcije useLoginMutation i setCredentials
+-importujemo objekt toast iz paketa React Toastify
+-kreiramo varijable const dispatch i const navigate
+-kreiramo varijable const [login, { isLoading }] = useLoginMutation()
+-destruktuiramo varijablu const { userInfo } pomocu funkcije useSelector()
+-destruktuiramo varijablu const { search } = useLocation()
+-kreiramo varijablu const sp (search params)
+-kreiramo varijablu const redirect
+-kreiramo funkciju useEffect()
+-u funkciji submitHandler() kreiramo try - catch blokove koda
+-u bloku koda try kreiramo varijablu const res
+-dodajemo funkciju dispatch(setCredentials({ ... res }))
+-u blok koda catch(error) dodajemo objekt toast.error()
+-u komponentu Form dodajemo uslov {isLoading && <Loader />}
+-u komponenti Header.jsx destruktuiramo varijablu const { userInfo }
+-u komponentu Header.jsx importujemo komponentu NavDropdown
+-u return izjavu dodajemo uslov {userInfo ? () : ()}
+-kreiramo funkciju logoutHandler()
+-komponenti NavDropdown.Item dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju logoutHandler
