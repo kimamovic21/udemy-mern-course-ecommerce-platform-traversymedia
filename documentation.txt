@@ -492,3 +492,156 @@ Section 8: Frontend Authentication
 -dodajemo uslov else
 -u uslov else dodajemo blokove koda try - catch
 -u komponentu main.jsx importujemo komponentu RegisterScreen.jsx
+
+
+Section 9: Checkout Process - Part 1
+
+52. Shipping Screen
+-u folderu frontend, u cartSlice.js fajlu, dodajemo shippingAddress i paymentMethod
+-kreiramo i eksportujemo funkciju saveShippingAddress()
+-u folderu screens kreiramo komponentu ShippingScreen.jsx
+-u komponentu ShippingScreen.jsx importujemo komponentu FormContainer
+-importujemo komponente Form, Button iz paketa React Bootstrap
+-kreiramo state varijable address, city, postalCode, country
+-u komponentu main.jsx importujemo komponentu ShippingScreen.jsx
+-kreiramo rutu '/shipping' za komponentu ShippingScreen
+-u komponenti ShippingScreen.jsx kreiramo funkciju submitHandler()
+-u return izjavi kreiramo komponentu FormContainer kao roditelj komponentu
+-kreiramo komponentu Form
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-kreiramo komponente Form.Group, Form.Label, Form.Control
+-kreiramo komponentu Button
+-importujemo funkcije useDispatch i useSelector iz paketa React Redux
+-importujemo funkciju useNavigate iz paketa React Router Dom
+-importujemo funkciju saveShippingAddress iz cartSlice.js fajla
+-kreiramo funkciju useSelector()
+-vrijednost funkcije useSelector() pohranjujemo u varijablu const cart
+-destruktuiramo varijablu const { shippingAddress } = cart
+-kreiramo varijable const navigate i const dispatch
+-u funkciju submitHandler() dodajemo funkciju  dispatch(saveShippingAddress({ ... }))
+-dodajemo varijablu navigate('/payment')
+
+53. Private Routes
+-u folderu components kreiramo komponentu PrivateRoute.jsx
+-importujemo komponente Outlet i Navigate iz pakete React Router Dom
+-importujemo funkciju useSelector iz paketa React Redux
+-destruktuiramo varijablu const { userInfo }
+-u return izjavu dodajemo uslov ternarni operator return userInfo
+-u komponentu main.jsx importujemo komponentu PrivateRoute.jsx
+-kreiramo rutu za komponentu PrivateRoute
+-u rutu za komponentu PrivateRoute dodajemo rutu za komponentu ShippingScreen
+
+54. Checkout Steps Component
+-u folderu components kreiramo komponentu CheckoutSteps.jsx
+-u komponente CheckoutSteps.jsx importujemo komponente Nav i LinkContainer
+-funkciji CheckoutSteps() dodajemo parametre destruktuirane props step1, step2, step3, step4
+-u return izjavi kreiramo komponentu Nav kao roditelj komponentu
+-kreiramo komponentu Nav.Item
+-u komponenti Nav.Item dodajemo ternarni uslov step1 ? () : ()
+-u komponentu ShippingScreen.jsx importujemo komponentu CheckoutSteps.jsx
+-u return izjavi komponenti CheckoutSteps dodajemo props
+-u komponenti CheckoutSteps ponovo postupak za props step2, step3 i step4
+
+55. Payment Method 
+-u cartSlice.js fajlu kreiramo i eksportujemo funkciju savePaymentMethod()
+-u folderu screens kreiramo komponentu PaymentScreen.jsx
+-u komponentu PaymentScreen.jsx importujemo komponente Form, Button, Col iz paketa React Bootstrap
+-importujemo React Hook useState i useEffect
+-importujemo funkcije useDispatch i useSelector iz paketa React Redux
+-importujemo funkciju useNavigate iz paketa React Router Dom
+-importujemo funkciju savePaymentMethod iz cartSlice.js fajla
+-kreiramo state varijablu paymentMethod i funkciju setPaymentMethod
+-importujemo komponente FormContainer i CheckoutSteps
+-u return izjavi kreiramo komponentu FormContainer kao roditelj komponentu
+-u komponenti FormContainer kreiramo komponentu CheckoutSteps
+-komponenti CheckoutSteps dodajemo props step1 step2 i step3
+-kreiramo komponente Form.Group, Form.Label, Col, Form.Check
+-komponenti Form.Check dodajemo vise props
+-u prop onChange proslijedujemo funkciju setPaymentMethod
+-kreiramo komponentu Button
+-u komponentu main.jsx importujemo komponentu PaymentScreen.jsx
+-u zasticenoj ruti PrivateRoute kreiramo rutu '/payment' za komponentu PaymentScreen
+-kreiramo varijable const dispatch i const navigate
+-kreiramo funkciju useSelector()
+-vrijednost funkcije useSelector() pohranjujemo u varijablu const cart
+-destruktuiramo varijablu const {shippingAddress} = cart
+-kreiramo funkciju useEffect()
+-u funkciji useEffect(), u callback funkciju dodajemo uslov if(!shippingAddress)
+-u uslov if dodajemo navigate('/shipping')
+-kreiramo funkciju submitHandler
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-u funkciju submitHandler() dodajemo funkciju dispatch()
+-dodajemo varijablu navigate('/placeorder')
+
+56. Order Routes & Controller
+-u folderu backend, u folderu routes kreiramo orderRoutes.js fajl
+-u folderu controllers kreiramo orderController.js fajl
+-u orderController.js fajlu kreiramo funkcije addOrderItems, getMyOrders, getOrderById, updateOrderToPaid, updateOrderToDelivered, getOrders 
+-eksportujemo funkcije
+-u orderRoutes.js fajl importujemo funkcije iz orderController.js fajla
+-u orderRoutes.js fajlu kreiramo rute
+-eksportujemo varijablu router kao default
+-u server.js fajl import varijablu orderRoutes
+-kreiramo metodu app.use('/api/orders', orderRoutes)
+-kreiramo i testiramo rute u Postman-u
+
+57. Create & Get Orders
+-u orderController.js fajlu,u funkciji addOrderItems destruktuiramo varijable iz req.body
+-dodajemo uslov if (orderItems && orderItems.length === 0)
+-u uslov if dodajemo metodu res.status(400)
+-dodajemo objekt new Error()
+-dodajemo uslov else
+-u uslovu else kreiramo varijablu const order
+-kreiramo varijablu const createdOrder
+-dodajemo metodu res.status(201).json(createdOrder)
+-u funkciji getMyOrders() kreiramo varijablu const orders
+-dodajemo metodu res.status(200).json(orders)
+-u funkciji getOrderById() kreiramo varijablu const order
+-dodajemo uslov if (order)
+-u uslov if dodajemo metodu res.status(200).json(order)
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(404)
+-dodajemo objekt Error()
+
+58. Order API Slice & Start Order Screen
+-u folderu frontend, u folderu slices kreiramo ordersApiSlices.js
+-u ordersApiSlices.js fajlu kreiramo i eksportujemo varijablu const ordersApiSlice
+-eksportujemo funkciju useCreateOrderMutation
+-u cartSlice.js fajlu kreiramo i eksportujemo funkciju clearCartItems
+-u folderu screens kreiramo komponentu PlaceOrderScreen.jsx
+-u komponentu main.jsx importujemo komponentu PlaceOrderScreen.jsx
+-u zasticenoj ruti PrivateRoute kreiramo rutu za '/placeholder' i komponentu PlaceOrderScreen
+-u komponentu PlaceOrderScreen.jsx importujemo React Hook useEffect
+-importujemo komponentu Link i funkciju useNavigate iz paketa React Router Dom
+-importujemo komponente Button, Row, Col, ListGroup, Image, Card iz paketa React Bootstrap
+-importujemo funkcije useSelector i useDispatch iz paketa React Redux
+-importujemo komponentu CheckoutSteps
+-kreiramo varijable const navigate i const dispatch
+-kreiramo funkciju useSelector
+-vrijednost funkcije useSelector pohranjujemo u varijablu const cart
+-kreiramo funkciju useEffect()
+-u funkcije useEffect, u callback funkciji dodajemo uslov if - else if
+-u return izjavu kreiramo komponentu CheckoutSteps sa props
+-kreiramo komponentu Row i komponente Col
+
+59. Creating an Order
+-importujemo objekt toast iz pakete React Toastify
+-importujemo komponente Message.jsx i Loader.jsx
+-importujemo funkciju useCreateOrderMutation iz ordersApiSlice.js fajla
+-importujemo funkciju clearCartItems iz cartSlice.js fajla
+-kreiramo komponente ListGroup, ListGroup.Item, Row, Col
+-u komponentu ListGroup.Item dodajemo ternarni uslov cart.cartItems.length === 0 ? (...) : (...)
+-kreiramo funkciju placeOrderHandler()
+-kreiramo komponentu Button
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju placeOrderHandler
+-kreiramo funkciju useCreateOrderMutation()
+-vrijednost funkcije useCreateOrderMutation() pohranjujemo u varijable const [createOrder, { isLoading, error }]
+-u komponentu ListGroup.Item dodajemo uslov  {error && <Message />}
+-ispod komponente Button dodajemo uslov {isLoading && <Loader />}
+-u funkciju placeOrderHandler() dodajemo blokove koda try - catch
+-u bloku koda try kreiramo varijablu const res
+-dodajemo funkciju dispatch(clearCartItems())
+-u blok koda try dodajemo toast.error(error)
