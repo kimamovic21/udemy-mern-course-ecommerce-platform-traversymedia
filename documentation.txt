@@ -645,3 +645,122 @@ Section 9: Checkout Process - Part 1
 -u bloku koda try kreiramo varijablu const res
 -dodajemo funkciju dispatch(clearCartItems())
 -u blok koda try dodajemo toast.error(error)
+
+
+Section 10: Checkout Process - Part 2
+
+60. Order Page
+-u folderu frontend, u ordersApiSlice.js fajlu kreiramo funkciju getOrderDetails
+-eksportujemo funkciju useGetOrderDetailsQuery 
+-u folderu screens kreiramo komponentu OrderScreen.jsx 
+-u komponentu OrderScreen.jsx importujemo komponentu Link i funkciju useParams iz paketa React Router Dom
+-importujemo komponente iz paketa React Bootstrap
+-importujemo funkciju useGetOrderDetailsQuery
+-u komponentu main.jsx importujemo komponentu OrderScreen.jsx
+-u zasticenu rutu PrivateRoute kreiramo rutu '/order/:id' za komponentu OrderScreen
+-u OrderScreen.jsx komponenti kreiramo funkciju useGetOrderDetailsQuery(orderId)
+-destruktuiramo varijable const { data:order, isLoading, error }
+-u return izavi dodajemo ternarni uslov za varijablu isLoading 
+-kreiramo React Bootstrap komponente
+-dodajemo ternarni uslov order?.isDelivered
+-dodajemo ternarni uslov order?.isPaid
+-dodajemo metodu order?.orderItems?.map()
+
+61. PayPal Setup & Order Paid
+-u folderu backend, u orderController.js fajlu, u funkciji updateOrderToPaid() kreiramo varijablu onst order 
+-dodajemo uslov if (order)
+-kreiramo varijablu const updatedOrder
+-dodajemo metodu res.status(200).json(updatedOrder)
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(404)
+-dodajemo objekt Error()
+-otvorimo web stranicu https://developer.paypal.com/home
+-kreiramo PayPal racun
+-u .env fajlu kreiramo varijable PAYPLAY_CLIENT_ID
+-u server.js fajlu kreiramo metodu za PayPal app.get('/api/config/paypal')
+-kreiramo varijablu const PAYPAL_CLIENT_ID
+
+62. React - PayPal Integration
+-otvorimo link https://www.npmjs.com/package/@paypal/react-paypal-js
+-u folderu frontend instaliramo paket React Paypal u terminalu sa komandom npm i @paypal/react-paypal-js
+-u komponentu main.jsx importujemo komponentu PayPalScriptProvider iz paketa React Paypal
+-u metodi render() kreiramo komponentu PayPalScriptProvider sa otvorenim u zatvorenim tagom
+-komponenti PayPalScriptProvider dodajemo prop deferLoading
+-u komponentu PayPalScriptProvider dodajemo komponentu RouterProvider
+-u ordersApiSlice.js fajlu kreiramo funkciju payOrder
+-importujemo varijablu PAYPAL_URL 
+-kreiramo funkciju getPayPalClientId
+-eksportujemo funkcije usePayOrderMutation i useGetPayPalClientIdQuery
+-u komponentu OrderScreen.jsx importujemo komponentu PayPalButtons i funkciju usePayPalScriptReducer iz paketa React PayPal
+-importujemo funkcije usePayOrderMutation, useGetPayPalClientIdQuery iz ordersApiSlice.js fajl
+-importujemo objekt toast iz paketa React Toastify
+-importujemo funkciju useSelector iz paketa React Redux
+-importujemo React Hook useEffect
+-kreiramo funkciju usePayOrderMutation()
+-destruktuiramo varijable const [payOrder, { isLoading: loadingPay }]
+-kreiramo funkciju usePayPalScriptReducer()
+-destruktuiramo varijable const [{ isPending }, paypalDispatch ]
+-kreiramo funkciju useSelector()
+-destruktuiramo varijablu const { userInfo }
+-kreiramo funkciju useGetPayPalClientIdQuery()
+-destruktuiramo varijable const { data: paypal, isLoading: loadingPayPal, error: errorPaypal }
+-kreiramo funkciju useEffect()
+-u funkciju useEffect(), u callback funkciju dodajemo uslov if (!errorPaypal && !loadingPayPal && paypal.clientId) 
+-u uslovu if kreiramo asinhronu funkciju loadPayPalScript()
+-u funkciju loadPayPalScript() dodajemo funkciju paypalDispatch()
+-u funkciji paypalDispatch() kreiramo konfiguracioni objekt
+-pozivamo funkciju paypalDispatch({ ... })
+-dodajemo uslov if (order && !order.isPaid)
+-u uslov if (order && !order.isPaid) dodajemo uslov if (!window.paypal)
+-u uslov if (!window.paypal) dodajemo funkciju loadPayPalScript()
+
+63. PayPal Buttons
+-u komponentu OrderScreen.jsx dodajemo uslov {!order.isPaid && (...)}
+-dodajemo uslov {loadingPay && <Loader />}
+-dodajemo uslov {isPending ? <Loader /> : (...)}
+-kreiramo komponentu Button Test Pay Order
+-kreiramo funkciju onApproveTest()
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju onApproveTest
+-kreiramo komponentu PayPalButtons
+-komponenti PayPalButtons dodajemo props createOrder, onApprove, onError
+-kreiramo 4 funkcije: onApprove(), onApproveTest(), onError(), createdOrder()
+-u funkciju onApprove dodajemo return actions.order.capture().then
+-dodajemo blokove koda try - catch
+
+64. User Profile & Update
+-u usersApiSlice.js fajlu kreiramo funkciju profile
+-eksportujemo funkciju useProfileMutation
+-u folderu screens kreiramo komponentu ProfileScreen.jsx
+-u komponentu main.jsx importujemo komponentu ProfileScreen.jsx
+-u zasticenoj ruti PrivateRoute kreiramo rutu '/profile' za komponentu ProductScreen.jsx
+-ponovimo proces importovanja kao u ostalim komponentama
+-u komponentu ProductScreen.jsx importujemo funkcije setCredentials i useProfileMutation 
+-kreiramo state varijable name, email, password, confirmPassword
+-kreiramo varijablu const dispatch
+-destruktuiramo varijablu const { userInfo }
+-kreiramo funkciju useEffect()
+-u funkciji useEffect(), u callback funkciji kreiramo uslov if (userInfo)
+-kreiramo funkciju submitHandler()
+-u return izjavi kreiramo React Bootstrap komponente
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-kreiramo funkciju useProfileMutation()
+-destruktuiramo varijable const [updateProfile, { isLoading: loadingUpdateProfile }]
+-dodajemo uslov {loadingUpdateProfile && <Loader />}
+-u funkciju submitHandler() dodajemo uslov if (password !== confirmPassword) 
+-dodajemo uslov else
+-u uslov else dodajemo blokove koda try - catch
+-u bloku koda try kreiramo varijablu const res 
+-u blok koda catch dodajemo objekt toast.error()
+-u blok koda try dodajemo funkciju dispatch(setCredentials(res))
+-dodajemo objekt toast.success()
+
+65. Display Order History
+-u ordersApiSlice.js fajlu kreiramo funkciju getMyOrders
+-eksportujemo funkciju useGetMyOrdersQuery
+-u komponentu ProfileScreen.jsx importujemo funkciju useGetMyOrdersQuery
+-kreiramo funkciju useGetMyOrdersQuery()
+-destruktuiramo varijable const { data: orders, isLoading, error }
+-u return izjavu dodajemo ternarni uslov {isLoading ? ... }
+-u return izjavi, u komponenti Table kreiramo metodu orders?.map()
