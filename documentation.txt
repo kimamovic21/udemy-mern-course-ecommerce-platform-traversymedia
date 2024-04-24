@@ -217,7 +217,7 @@ Section 5: Redux Toolkit Setup & State Management
 -u komponentu HomeScreen.jsx importujemo funkciju useGetProductsQuery 
 
 30. Get Product Details Endpoint Challenge
--u productApiSlice.js fajlu kreiramo endpoint funkciju getProductDetails i eksportujemo funkciju useGetProductDetailsQuery
+-u productsApiSlice.js fajlu kreiramo endpoint funkciju getProductDetails i eksportujemo funkciju useGetProductDetailsQuery
 -u komponentu HomeScreen.jsx importujemo funkciju useGetProductDetailsQuery
 
 31. Loader & Message Components
@@ -606,8 +606,8 @@ Section 9: Checkout Process - Part 1
 -dodajemo objekt Error()
 
 58. Order API Slice & Start Order Screen
--u folderu frontend, u folderu slices kreiramo ordersApiSlices.js
--u ordersApiSlices.js fajlu kreiramo i eksportujemo varijablu const ordersApiSlice
+-u folderu frontend, u folderu slices kreiramo ordersApiSlice.js
+-u ordersApiSlice.js fajlu kreiramo i eksportujemo varijablu const ordersApiSlice
 -eksportujemo funkciju useCreateOrderMutation
 -u cartSlice.js fajlu kreiramo i eksportujemo funkciju clearCartItems
 -u folderu screens kreiramo komponentu PlaceOrderScreen.jsx
@@ -764,3 +764,248 @@ Section 10: Checkout Process - Part 2
 -destruktuiramo varijable const { data: orders, isLoading, error }
 -u return izjavu dodajemo ternarni uslov {isLoading ? ... }
 -u return izjavi, u komponenti Table kreiramo metodu orders?.map()
+
+
+Section 11: Admin Functionality
+
+66. Admin Route Component
+-u folderu components kreiramo komponentu AdminRoute.jsx
+-u komponenti AdminRoute.jsx destruktuiramo varijablu const { userInfo }
+-u return izjavu dodajemo uslov userInfo && userInfo.isAdmin
+-u folderu screens kreiramo komponentu OrderListScreen.jsx
+-u komponentu main.jsx importujemo komponente AdminRoute.jsx i OrderListScreen.jsx
+-u komponenti main.jsx kreiramo rutu za komponentu AdminRoute
+-u zasticenoj ruti AdminRoute kreiramo rutu za komponentu OrderListScreen
+-u folderu screens kreiramo folder admin
+-u folder admin dodajemo komponentu dodajemo komponentu OrderListScreen.jsx
+-u komponentu Header.jsx, u return izjavu dodajemo uslov {userInfo && userInfo.isAdmin} && ( ... )
+
+67. List Orders For Admin
+-ufolderu backend, u orderController.js fajlu, u funkciji getOrders() kreiramo varijablu const orders
+-kreiramo metodu res.status(200).json(orders)
+-u orderesApiSlice.js fajlu kreiramo funkciju getOrders()
+-eksportujemo funkciju useGetOrdersQuery
+-u komponentu OrderListScreen.jsx importujemo funkciju useGetOrdersQuery
+-importujemo komponente Message.jsx i Loader.jsx
+-importujemo komponentu FaTimes
+-kreiramo funkciju useGetOrdersQuery()
+-destruktuiramo varijable const { data:orders, isLoading, error }
+-u return izjavu dodajemo uslov ternarni operator {isLoading ? ( ... )}
+-kreiramo komponente React Bootstrap i HTML elemente za tabelu
+-dodajemo uslov orders?.map((order) => ... )
+-dodajemo uslov ternarni operator {order?.isPaid ? ( ... ) : ( ... )}
+-dodajemo uslov ternarni operator {order?.isDelivered ? ( ... ) : ( ... )}
+
+68. Deliver Order Status
+-u orderController.js fajlu, u funkciji updateOrderToDelivered() kreiramo varijablu const order
+-dodajemo uslov if (order)
+-u uslovu if (order) kreiramo varijablu const updatedOrder
+-dodajemo metodu res.status(200).json(updatedOrder)
+-dodajemo uslov else
+-u uslov else dodajemo metodu res.status(404) i objekt Error()
+-u ordersApiSlice.js fajlu kreiramo funkciju deliverOrder()
+-eksportujemo funkciju useDeliverOrderMutation
+-u komponentu OrderScreen.jsx importujemo funkciju useDeliverOrderMutation
+-kreiramo funkciju useDeliverOrderMutation()
+-destruktuiramo varijable const [deliverOrder, { isLoading: loadingDeliver }]
+-u return izjavi dodajemo uslov  {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (...)}
+-kreiramo funkciju deliverOrderHandler()
+-u funkciju deliverOrderHandler() dodajemo blokove koda try - catch
+-u blok koda try dodajemo funkciju deliverOrder(orderId)
+-dodajemo funkciju refetch()
+-dodajemo objekt toast.success('...')
+-u blok koda catch dodajemo objekt toast.error(error)
+-kreiramo komponentu Button
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju deliverOrderHandler
+
+69. List Products For Admin
+-u folderu admin kreiramo komponentu ProductListScreen.jsx
+-u komponentu main.jsx importujemo komponentu ProductListScreen.jsx
+-u zasticenoj ruti AdmirRoute kreiramo rutu za komponentu ProductListScreen
+-u komponentu OrderListScreen.jsx importujemo funkciju useGetProductsQuery
+-kreiramo funkciju useGetProductsQuery()
+-destruktuiramo varijable const { data: products, isLoading, error }
+-u return izjavi dodajemo uslov ternarni operator isLoading ? ( ... )
+-u return izjavi kreiramo React Bootstrap komponente
+-kreiramo funkciju deleteProductHandler()
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju deleteProductHandler
+
+70. Creating Products
+-u folderu backend, u productController.js fajlu kreiramo i eksportujemo funkciju createProduct()
+-u funkciji createProduct() kreiramo varijablu const product
+-kreiramo varijablu const createdProduct
+-dodajemo metodu res.status(201).json(createdProduct)
+-u productRoutes.js fajlu kreiramo rutu za funkciju createProduct
+-importujemo funkcije protect, admin, createProduct
+-u folderu frontend, u productsApiSlice.js fajlu kreiramo funkciju createProduct
+-eksportujemo funkciju useCreateProductMutation
+-u komponentu ProductListScreen.jsx importujemo funkciju useCreateProductMutation 
+-kreiramo funkciju useCreateProductMutation()
+-destruktuiramo varijable const [createProduct, { isLoading: loadingCreate }]
+-kreiramo funkciju createProductHandler()
+-komponenti Button Create Product dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju createProductHandler
+-u funkciju createProductHandler() dodajemo uslov if (window.confirm(...))
+-u uslov if dodajemo blokove koda try - catch
+-u blok koda try dodajemo funkcije createProduct() i refetch()
+-u blok koda catch dodajemo objekt toast.error()
+-u return izjavi dodajemo uslov {loadingCreate && <Loader />}
+
+71. Edit Product
+-u folderu backend, u productController.js fajlu kreiramo i eksportujemo funkciju updateProduct()
+-u funkciji updateProduct() destruktuiramo varijable iz req.body
+-kreiramo varijablu const product
+-dodajemo uslov if (product) 
+-kreiramo varijablu const updatedProduct
+-dodajemo metodu res.status(201).json(updatedProduct)
+-dodajemo blok koda else
+-u blok koda else dodajemo metodu res.status(404) i objekt Error()
+-u productRoutes.js fajl importujemo funkciju updateProduct
+-kreiramo rutu za funkciju updateProduct
+-u productsApiSlice.js fajlu kreiramo funkciju updateProduct
+-eksportujemo funkciju useUpdateProductMutation
+-u folderu admin kreiramo komponentu ProductEditScreen.jsx
+-u komponentu main.jsx importujemo komponentu ProductEditScreen.jsx
+-u zasticenoj ruti AdminRoute kreiramo rutu za komponentu ProductEditScreen.jsx
+-u komponentu ProductEditScreen.jsx importujemo funkcije useGetProductDetailsQuery, useUpdateProductMutation
+-importujemo komponente iz paketa React Bootstrap
+-importujemo komponente i funkcije iz paketa React Router Dom
+-kreiramo funkciju useParams()
+-importujemo React Hook useState i useEffect
+-destruktuiramo varijablu const { id: productId }
+-kreiramo vise state varijabli
+-kreiramo funkciju useGetProductDetailsQuery(productId) 
+-destruktuiramo varijable const { data: product, isLoading, refetch, error }
+-kreiramo funkciju useUpdateProductMutation()
+-destruktuiramo varijable const [updateProduct, { isLoading: loadingUpdating }]
+-kreiramo varijablu const navigate
+-kreiramo funkciju useEffect()
+-u funkciji useEffect(), u callback funkciju dodajemo uslov if (product)
+-u uslov if (product) dodajemo set funkcije
+-u return izjavi kreiramo komponente React Bootstrap
+-dodajemo uslov {loadingUpdating && <Loader />}
+-dodajemo uslov ternarni operator {isLoading ? (...)}
+-kreiramo komponente FormContainer, Form, Form.Group, Form.Label, Form.Control
+-komponentama Form.Control dodajemo prop onChange
+-kreiramo funkciju submitHandler()
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-u funkciji submitHandler() kreiramo varijablu const updatedProduct 
+-kreiramo varijablu const result 
+-dodajemo uslov if (result?.error)
+-u uslov if dodajemo objekt toast
+-dodajemo uslov else
+-u uslov else dodajemo objekt toast
+-dodajemo funkciju navigate()
+-u productsApiSlice.js fajl, u funkciju getProducts() dodajemo providesTags: ['Product']
+
+72. Update Product Bug Fix
+
+73. Multer & Image Upload Endpoint
+-otvorimo link https://www.npmjs.com/package/multer
+-u folderu backend instaliramo paket Multer sa komandom  npm i multer
+-u folderu routes kreiramo uploadRoutes.js fajl
+-u uploadRoutes.js fajl importujemo paket Multer
+-kreiramo funkciju multer.diskStorage({ ... })
+-vrijednost funkcije multer.diskStorage() pohranjujemo u varijablu const storage
+-varijablu storage eksportujemo kao default
+-kreiramo folder uploads
+-u metodi diskStorage() kreiramo funkcije destination() i filename()
+-kreiramo funkciju checkFileType() sa dva parametra file i cb
+-kreiramo funkciju multer({ storage })
+-vrijednost funkcije multer() pohranjujemo u varijablu const upload
+-kreiramo metodu router.post('/', ...)
+-u server.js fajl importujemo funkciju uploadRoutes
+-kreiramo metodu app.use('/api/upload', uploadRoutes)
+-importujemo modul path
+-kreiramo varijablu const __dirname
+-kreiramo metodu app.use('/uploads', ...)
+
+74. Upload Product Image - Frontend
+-u constants.js fajlu kreiramo varijablu const UPLOAD_URL
+-u productsApiSlice.js fajlu kreiramo funkciju uploadProductImage
+-eksportujemo funkciju useUploadProductImageMutation
+-u komponentu ProductEditScreen.jsx importujemo funkciju useUploadProductImageMutation
+-kreiramo funkciju useUploadProductImageMutation()
+-destruktuiramo variant const [uploadProductImage, { isLoading: loadingUpload }]
+-kreiramo komponente React Bootstrap za upload slike
+-kreiramo funkciju uploadFileHandler()
+-komponenti Form.Control dodajemo prop onChange
+-u prop onChange proslijedujemo funkciju uploadFileHandler
+
+75. Delete Product
+-u productController.js fajlu kreiramo i eksportujemo funkciju deleteProduct()
+-u productRoutes.js fajl importujemo funkciju deleteProduct
+-kreiramo rutu za funkciju deleteProduct
+-u productsApiSlice.js fajlu kreiramo funkciju deleteProduct
+-eksportujemo funkciju useDeleteProductMutation
+-u komponentu ProductListScreen.jsx importujemo funkciju useDeleteProductMutation
+-kreiramo funkciju useDeleteProductMutation()
+-destruktuiramo varijable const [deleteProduct, { isLoading: loadingDelete}]
+-u funkciju deleteProductHandler() dodajemo uslov if (window.confirm('...'))
+-u uslov if dodajemo blokove koda try - catch
+-u blok koda try dodajemo await deleteProduct(id)
+-dodajemo funkciju refetch()
+-u blok koda catch dodajemo objekt Error()
+-u return izjavu dodajemo uslov {loadingDelete && <Loader />}
+
+76. Backend User Routes
+-u userController.js fajlu, u funkciji getUsers() kreiramo varijablu const users
+-u funkciji getUserById() kreiramo varijablu const user
+-dodajemo uslov if (user) 
+-u funkciji deleteUser() kreiramo varijablu const user
+-dodajemo uslov if (user)
+u uslov if (user) dodajemo uslvo if (user.isAdmin)
+-dodajemo metodu  await User.deleteOne({ ... })
+-dodajemo metodu res.status(200).json({ ... })
+-dodajemo uslov else 
+-u uslov else dodajemo metodu res.status(404) i objekt Error
+-u funkciji updateUser() kreiramo varijablu const user
+-dodajemo uslov if (user)
+-u uslovu if (user) kreiramo varijablu const updatedUser
+-dodajemo metodu res.status(200).json({ ... })
+-dodajemo uslov else 
+-u uslov else dodajemo metodu res.status(404) i objekt Error
+
+77. List Users For Admin
+-u usersApiSlice.js fajlu kreiramo funkciju getUsers
+-eksportujemo funkciju useGetUsersQuery
+-u folderu screens kreiramo komponentu UserListScreen.jsx
+-u komponentu main.jsx importujemo komponentu UserListScreen.jsx
+-u zasticenoj ruti AdminRoute, kreiramo rutu za komponentu UserListScreen.jsx
+-sadrzaj iz komponente OrderListScreen.jsx kopiramo u komponentu UserListScreen i napravimo izmjene u varijablama
+-kreiramo funkciju deleteUserHandler()
+-u return izjavi kreiramo komponente React Bootstrap
+-komponenti Button dodajemo prop onClick
+-u prop onClick proslijedujemo funkciju deleteUserHandler
+
+78. Delete User
+-u usersApiSlice.js fajlu kreiramo funkciju deleteUser
+-eksportujemo funkciju useDeleteUserMutation
+-u komponentu UserListScreen.jsx importujemo funkciju useDeleteUserMutation
+-kreiramo funkciju useDeleteUserMutation()
+-destruktuiramo varijable const [deleteUser, { isLoading: loadingDelete }]
+-u return izjavi dodajemo uslov {loadingDelete && <Loader />}
+-u funkciju deleteUserHandler() dodajemo uslov if(window.confirm('...'))
+-u uslov if dodajemo blokove koda try - catch
+-u blok koda try dodajemo funkcije await deleteUser(id) i refetch()
+-dodajemo objekt toast.success()
+-u blok koda catch dodajemo objekt toast.error()
+
+79. Update Users
+-u usersApiSlice.js fajlu kreiramo funkcije getUserDetails i updateUser
+-eksportujemo funkcije useGetUserDetailsQuery i useUpdateUserMutation
+-u folderu screens kreiramo komponentu UserEditScreen.jsx
+-u komande main.jsx importujemo komponentu UserEditScreen.jsx
+-u zasticenoj rutu AdminRoute kreiramo rutu za komponentu UserEditScreen.jsx
+-kopiramo sadrzaj iz komponente ProductEditScreen.jsx u komponentu UserEditScreen.jsx i izmjenimo imena varijabli
+-u komponentu UserEditScreen.jsx importujemo funkcije  useUpdateUserMutation, useGetUserDetailsQuery
+-kreiramo funkciju submitHandler()
+-u funkciju submitHandler() dodajemo blokove koda try - catch
+-u blok koda try dodajemo await updateUser({ ... })
+-dodajemo objekt toast.success()
+-dodajemo funkciju refetch()
+-dodajemo funkciju navigate()
+-u blok koda catch dodajemo objekt toast.error()
