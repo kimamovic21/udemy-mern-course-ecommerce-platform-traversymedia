@@ -660,7 +660,7 @@ Section 10: Checkout Process - Part 2
 -u zasticenu rutu PrivateRoute kreiramo rutu '/order/:id' za komponentu OrderScreen
 -u OrderScreen.jsx komponenti kreiramo funkciju useGetOrderDetailsQuery(orderId)
 -destruktuiramo varijable const { data:order, isLoading, error }
--u return izavi dodajemo ternarni uslov za varijablu isLoading 
+-u return izjavi dodajemo ternarni uslov za varijablu isLoading 
 -kreiramo React Bootstrap komponente
 -dodajemo ternarni uslov order?.isDelivered
 -dodajemo ternarni uslov order?.isPaid
@@ -1009,3 +1009,128 @@ u uslov if (user) dodajemo uslvo if (user.isAdmin)
 -dodajemo funkciju refetch()
 -dodajemo funkciju navigate()
 -u blok koda catch dodajemo objekt toast.error()
+
+
+Section 12: Reviews, Search & More
+
+80. Create Reviews - Backend
+-u folderu backend, u productController.js fajlu kreiramo i eksportujemo funkciju createProductReview()
+-u funkciji createProductReview() destruktuiramo varijable const { rating, comment }
+-dodajemo uslov if (product)
+-kreiramo varijablu const product
+-dodajemo uslov if (product)
+-u uslovu if (product) kreiramo varijablu const alreadyReviewed
+-dodajemo uslov if (alreadyReviewed)
+-kreiramo objekt varijablu const review 
+-dodajemo metodu product.reviews.push(review)
+-dodajemo metodu product.numReviews = product.reviews.length
+-inicijaliziramo varijablu product.rating
+-dodajemo metodu await product.save()
+-dodajemo metodu res.status(201).json({ ... })
+-u productRoutes.js fajl importujemo funkciju createProductReview
+-kreiramo zasticenu rutu za funkciju createProductReview
+
+81. Create Reviews - Frontend
+-u productsApiSlice.js fajlu kreiramo funkciju createReview
+-eksportujemo funkciju useCreateReviewMutation
+-u komponentu ProductScreen.jsx importujemo funkciju useCreateReviewMutation 
+-importujemo funkciju useSelector iz paketa React Redux
+-importujemo objekt toast za paketa React Toastify
+-kreiramo funkciju useCreateReviewMutation 
+-destruktuiramo varijable const [createReview, { isLoading: loadingProductReview }]
+-kreiramo state varijable rating i comment
+-kreiramo funkciju useSelector()
+-destruktuiramo varijablu const { userInfo }
+-u return izjavi kreiramo komponentu Row sa klasom review
+-dodajemo uslov {product.reviews.length === 0 && ...}
+-u komponentu ListGroup dodajemo metodu product?.reviews?.map()
+-dodajemo uslov {loadingProductReview && <Loader />}
+-dodajemo uslov ternarni operator {userInfo ? ( ... ) : ( ... )}
+-kreiramo asinhronu funkciju submitHandler()
+-u funkciju submitHandler() dodajemo blokove koda try - catch
+-u blok koda try dodajemo await createReview({ ... })
+-dodajemo funkciju refetch()
+-dodajemo objekt toast.success()
+-dodajemo set funkcije setRating(0) i setComment('')
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-u blok koda catch dodajemo objekt toast.error()
+
+82. Paginate Products
+-u productController.js fajlu, u funkciji getProducts() kreiramo varijable pageSize, page, count
+-modelu Product dodajemo metode limit() i skip()
+-u komponenti HomeScreen.jsx, umjesto products?.map() dodajemo data?.products?.map()
+-importujemo i kreiramo funkciju useParams()
+-destruktuiramo varijablu const { pageNumber }
+-u komponenti main.jsx, u zasticenoj ruti PrivateRoute kreiramo novu rutu '/page/:pageNumber' za komponentu HomeScreen
+
+83. Paginate Component
+-u folderu comment kreiramo komponentu Paginate.jsx
+-funkciji Paginate() dodajemo destruktuirane props pages, page, isAdmin = false
+-u komponentu Paginate.jsx importujemo komponente Pagination i LinkContainer
+-u komponentu HomeScreen.jsx importujemo komponentu Paginate.jsx
+-u return izjavu dodajemo komponentu Paginate
+-funkciji useGetProductsQuery() dodajemo argument { pageNumber }
+-komponenti Paginate dodajemo props pages i page
+-u komponenti ProductListScreen.jsx, umjesto metode products?.map() dodajemo data?.products?.map()
+-importujemo i kreiramo funkciju useParams()
+-destruktuiramo varijablu const { pageNumber }
+-funkciji useGetProductsQuery() dodajemo argument { pageNumber }
+-u komponenti main.jsx, u zasticenoj ruti AdminRoute kreiramo rutu '/admin/productlist/:pageNumber' za komponentu ProductListScreen
+-u komponentu ProductListScreen.jsx importujemo komponentu Paginate.jsx
+-u return izjavu dodajemo komponentu Paginate.jsx
+-komponenti Paginate dodajemo props pages, page i isAdmin
+
+84. Search Products
+-u productController.js fajlu, u funkciji getProducts() kreiramo varijablu const keyword
+-u komponenti HomeScreen.jsx destruktuiramo varijablu keyword
+-u komponenti main.jsx kreiramo rute '/search/:keyword' i '/search/:keyword/page/:pageNumber' za komponentu HomeScreen
+-u komponentu Paginate.jsx dodajemo ternarni uslov za varijablu keyword
+-u komponenti HomeScreen.jsx, u return izjavi komponenti Paginate dodajemo props pages, page i keyword
+
+85. Search Box Component
+-u folderu components kreiramo komponentu SearchBox.jsx
+-u komponentu SearchBox.jsx importujemo React Hook useState
+-importujemo komponente Form i Button iz paketa React Bootstrap
+-importujemo funkcije useParams i useNavigate iz paketa React Router Dom
+-kreiramo varijablu const navigate
+-destruktuiramo varijablu const { keyword: urlKeyword }
+-kreiramo state varijablu keyword i set funkciju setKeyword
+-kreiramo funkciju submitHandler()
+-u funkciju submitHandler() dodajemo uslov if (keyword.trim())
+-u return izjavi kreiramo komponente React Bootstrap
+-komponenti Form dodajemo prop onSubmit
+-u prop onSubmit proslijedujemo funkciju submitHandler
+-komponenti Form.Control dodajemo prop onChange
+-u prop onChange dodajemo funkciju setKeyword()
+-u komponentu Header.jsx importujemo komponentu SearchBox.jsx
+-u komponentu HomeScreen.jsx importujemo komponentu Link
+-u return izjavu dodajemo uslov {keyword && <Link>...</Link>}
+
+86. Product Carousel
+-u productController.js fajlu kreiramo i eksportujemo funkciju getTopProducts()
+-u funkciji getTopProducts() kreiramo varijablu const products
+-dodajemo metodu res.status(200).json(products)
+-u productRoutes.js importujemo funkciju getTopProducts
+-u productRoutes.js fajlu kreiramo rutu za top products
+-u productsApiSlice.js fajlu kreiramo funkciju getTopProducts
+-eksportujemo funkciju useGetTopProductsQuery
+-u folderu components kreiramo komponentu ProductCarousel.jsx
+-u komponentu ProductCarousel.jsx importujemo komponente Carousel i Image iz pakete React Bootstrap
+-importujemo funkciju useGetTopProductsQuery
+-kreiramo funkciju useGetTopProductsQuery()
+-destruktuiramo varijable const { data: products, isLoading, error } 
+-u return izjavi kreiramo komponente React Bootstrap
+-u komponenti Carousel.Item dodajemo metodu {products?.map()}
+-u komponentu HomeScreen.jsx importujemo komponentu ProductCarousel
+-u return izjavi dodajemo uslov ternarni operator {!keyword ? ... : ...}
+
+87. Page Titles
+-u folderu frontend instaliramo paket React Helmet Async 
+-u terminal ukucamo komandu npm i react-helmet-async
+-u komponentu main.jsx importujemo komponentu HelmetProvider iz paketa React Helmet Async
+-u metodu render() dodajemo komponentu HelmetProviderž
+-u folderu comment kreiramo komponentu Meta.jsx
+-u komponentu HomeScreen.jsx importujemo komponentu Meta.jsx
+-u komponentu ProductEditScreen.jsx, u return izjavi dodajemo uslov  {loadingUpload && <Loader />}
+-
