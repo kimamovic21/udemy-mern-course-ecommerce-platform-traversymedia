@@ -7,7 +7,7 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
-import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
 
 const PORT = process.env.PORT || 5000;
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;

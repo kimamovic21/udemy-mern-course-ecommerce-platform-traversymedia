@@ -922,6 +922,7 @@ Section 11: Admin Functionality
 -importujemo modul path
 -kreiramo varijablu const __dirname
 -kreiramo metodu app.use('/uploads', ...)
+-u folderu backend kreiramo folder uploads
 
 74. Upload Product Image - Frontend
 -u constants.js fajlu kreiramo varijablu const UPLOAD_URL

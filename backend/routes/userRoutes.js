@@ -11,7 +11,7 @@ import {
     deleteUser, 
     updateUser 
 } from '../controllers/userController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin } from '../middlewares/authMiddleware.js';
 
 router
     .route('/')       
