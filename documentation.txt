@@ -1134,4 +1134,20 @@ Section 12: Reviews, Search & More
 -u folderu comment kreiramo komponentu Meta.jsx
 -u komponentu HomeScreen.jsx importujemo komponentu Meta.jsx
 -u komponentu ProductEditScreen.jsx, u return izjavi dodajemo uslov  {loadingUpload && <Loader />}
--
+
+
+Section 13: Deploy to Production
+
+88. Prepare For Production
+-u folderu backend, u server.js fajlu dodajemo uslov if(NODE_ENV === 'production')
+-kreiramo varijablu const NODE_ENV
+-u .env fajlu kreiramo varijablu NODE_ENV
+-dodajemo uslov else
+-udemo u folderu frontend i u terminal ukucamo komandu npm run build
+-nakon izvrsenja komande npm run build kreiramo se folder dist
+-u productController.js fajlu kreiramo varijablu const PAGINATION_LIMIT
+-u .env fajlu kreiramo varijablu PAGINATION_LIMIT
+
+89. Deploy to Render
+-otvorimo link https://dashboard.render.com/ za upload foldera backend
+

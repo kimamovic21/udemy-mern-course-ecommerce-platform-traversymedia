@@ -1,11 +1,13 @@
 import asyncHandler from '../middlewares/asyncHandler.js';
 import Product from '../models/productModel.js';
 
+const PAGINATION_LIMIT = process.env.PAGINATION_LIMIT;
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
 export const getProducts = asyncHandler( async (req, res) => {
-    const pageSize = 4;
+    const pageSize = PAGINATION_LIMIT;
     const page = Number(req.query.pageNumber) || 1;
 
     const keyword = req.query.keyword 
