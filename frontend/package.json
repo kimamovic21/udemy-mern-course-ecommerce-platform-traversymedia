@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "proxy": "http://localhost:5000",
-  "engines": { "node": ">=18.0.0" },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

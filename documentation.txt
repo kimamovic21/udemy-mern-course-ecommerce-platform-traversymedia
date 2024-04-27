@@ -159,8 +159,8 @@ Section 4: Starting MongoDB & Mongoose
 -u folderu routes kreiramo productRoutes.js fajl
 -u server.js fajl importujemo varijablu productRoutes
 -kreiramo metodu app.use('/api/products', productRoutes)
--u folderu backend kreiramo folder middleware
--u folderu middleware kreiramo asyncHandler.js fajl
+-u folderu backend kreiramo folder middlewares
+-u folderu middlewares kreiramo asyncHandler.js fajl
 -u asyncHandler.js fajlu kreiramo funkciju asyncHandler()
 -u productRoutes.js fajl importujemo funkciju asyncHandler
 -importujemo objekt Product
@@ -171,7 +171,7 @@ Section 4: Starting MongoDB & Mongoose
 -kreiramo metodu res.status(404).json({ ... })
 
 25. Custom Error Middleware
--u folderu middleware kreiramo errorMiddleware.js fajl
+-u folderu middlewares kreiramo errorMiddleware.js fajl
 -u errorMiddleware.js fajlu kreiramo i eksportujemo funkcije notFound() i errorHandler()
 -u server.js fajl importujemo kreirane funkcije 
 -kreiramo dvije metode app.use(notFound) i app.use(errorHandler)
@@ -333,7 +333,7 @@ Section 7: Backend Authentication
 -u terminalu instaliramo paket Cookie Parser sa komandom npm i cookie-parser
 -u server.js fajl importujemo varijablu cookieParser
 -kreiramo metodu app.use(cookieParser())
--u folderu middleware kreiramo authMiddleware.js fajl
+-u folderu middlewares kreiramo authMiddleware.js fajl
 -importujemo varijablu jwt
 -importujemo funkciju asyncHandler
 -importujemo objekt User
@@ -1151,3 +1151,28 @@ Section 13: Deploy to Production
 89. Deploy to Render
 -otvorimo link https://dashboard.render.com/ za upload foldera backend
 
+90. Add Server IP To MongoDB Atlas
+
+91. Adding a Custom Domain
+
+92. Wrap Up
+
+
+Section 14: Bug Fixes
+
+93. Small Fixes
+-u folderu backend, u folderu middlewares, kreiramo checkObjectId.js fajl
+-u checkObjectId.js fajl import funkciju isValidObjectId iz paketa Mongoose
+-kreiramo funkciju checkObjectId() sa tri parametra req, res, next
+-u funkciju checkObjectId() dodajemo uslov if (!isValidObjectId(req.params.id))
+-u uslov if dodajemo metodu res.status(404) i objekt Error
+-nakon uslova if dodajemo funkciju next()
+-u productRoutes.js importujemo funkciju checkObjectId
+-u rute gdje se koristi :id dodajemo funkciju middleware checkObjectId
+-u folderu frontend, u cartSlice.js fajlu kreiramo i eksportujemo funkciju resetCart()
+-u komponentu Header.jsx importujemo funkciju resetCart 
+-u funkciju logoutHandler() dodajemo funkciju dispatch(resetCart())
+
+94. PayPal & Price Calculate Fixes
+-u folderu backend, u folderu utils kreiramo fajlove paypal.js i calcPrices.js
+-u orderController.js fajl importujemo model Product i funckije calcPrices, verifyPayPalPayment i checkIfNewTransaction
